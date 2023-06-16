@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class HideUIElements : MonoBehaviour
 {
-    public Text[] textsToHide;
+    public GameObject canvasMenu;
     public Button buttonToHide;
 
     private void Start()
@@ -14,13 +14,7 @@ public class HideUIElements : MonoBehaviour
 
     private void HideElements()
     {
-        // Hide the text objects
-        foreach (Text text in textsToHide)
-        {
-            text.gameObject.SetActive(false);
-        }
-
-        // Hide the button
-        buttonToHide.gameObject.SetActive(false);
+        // Hide the canvas menu
+        canvasMenu.SetActive(false);
     }
 }
