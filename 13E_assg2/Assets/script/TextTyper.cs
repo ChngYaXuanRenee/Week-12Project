@@ -14,14 +14,14 @@ public class TextTyper : MonoBehaviour
 
     int currentMessageIndex = 0; // Index to keep track of the current message being displayed
 
+    public Button button; // Reference to the button object
+
     // Use this for initialization
     void Start()
     {
         textComp = GetComponent<TextMeshProUGUI>(); // Use TextMeshProUGUI instead of Text
 
-        // Find the button component and attach a click event listener
-        Button button = GameObject.Find("YourButtonName").GetComponent<Button>();
-        button.onClick.AddListener(StartTextTyper);
+        button.onClick.AddListener(StartTextTyper); // Attach the click event listener
 
         // Hide the text initially
         textComp.text = "";
@@ -30,6 +30,7 @@ public class TextTyper : MonoBehaviour
     void StartTextTyper()
     {
         StartCoroutine(TypeText());
+        button.interactable = false; // Disable the button after it's clicked
     }
 
     IEnumerator TypeText()
