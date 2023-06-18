@@ -15,6 +15,11 @@ public class PlayerController : MonoBehaviour
     public TextMeshProUGUI displayText;
     public GameObject obj;
     public Transform head;
+
+    public AudioSource backgroundAudioSource; // Reference to the AudioSource component for background audio
+    public AudioSource footstepsAudioSource; // Reference to the AudioSource component for footsteps
+    public AudioClip backgroundMusic; // Background music audio clip
+    public AudioClip footstepSound; // Footstep sound effect audio clip
     //public GameObject head;
     //int score = 0;
 
@@ -55,7 +60,14 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // Assign the background music audio clip to the background audio source
+        backgroundAudioSource.clip = backgroundMusic;
 
+        // Assign the footstep sound effect audio clip to the footsteps audio source
+        footstepsAudioSource.clip = footstepSound;
+
+        // Play the background music
+        backgroundAudioSource.Play();
     }
 
     // Update is called once per frame
@@ -71,6 +83,23 @@ public class PlayerController : MonoBehaviour
         var moveRight = rightDir * moveData.x;
 
         GetComponent<Rigidbody>().MovePosition(transform.position + (moveForward + moveRight) * moveSpeed);
+
+
+        // Play footstep sounds when moving
+        if (moveData.magnitude > 0)
+        {
+            if (!footstepsAudioSource.isPlaying)
+            {
+                footstepsAudioSource.Play();
+            }
+        }
+        else
+        {
+            if (footstepsAudioSource.isPlaying)
+            {
+                footstepsAudioSource.Stop();
+            }
+        }
     }
 
     void OnJump()
