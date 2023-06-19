@@ -7,6 +7,7 @@ TagManager:
   - Obstacle
   - YourButtonTag
   - MyButton
+  - Key
   layers:
   - Default
   - TransparentFX

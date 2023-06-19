@@ -20,45 +20,15 @@ public class PlayerController : MonoBehaviour
     public AudioSource footstepsAudioSource; // Reference to the AudioSource component for footsteps
     public AudioClip backgroundMusic; // Background music audio clip
     public AudioClip footstepSound; // Footstep sound effect audio clip
-    //public GameObject head;
-    //int score = 0;
 
-    //private void OnCollisionEnter(Collision collision)
-    //{
-    //if (collision.gameObject.tag == "collectables")
-    //{
-    //Debug.Log("Enter : " + collision.gameObject.name);
-    //Destroy(collision.gameObject);
-    //}
-    //}
+    public int requiredKeys = 3;
+    public AudioClip doorUnlockSound;
+    public GameObject door;
 
-    void OnLook(InputValue value)
-    {
-        rotationInput = value.Get<Vector2>();
-    }
+    private int collectedKeys = 0;
+    private bool isDoorUnlocked = false;
 
-    void OnMove(InputValue value)
-    {
-        moveData = value.Get<Vector2>();
-
-        Debug.Log(moveData);
-
-    }
-
-    public AudioSource bgm;
-    public bool playing = false;
-
-    void onFire()
-    {
-        Debug.Log(transform.position);
-        Debug.Log(transform.rotation);
-        Debug.Log(transform.localScale);
-
-        transform.position += new Vector3(2f, 0, 0);
-    }
-
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         // Assign the background music audio clip to the background audio source
         backgroundAudioSource.clip = backgroundMusic;
@@ -70,8 +40,7 @@ public class PlayerController : MonoBehaviour
         backgroundAudioSource.Play();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
         transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles + new Vector3(0, rotationInput.x) * rotationSpeed);
         head.rotation = Quaternion.Euler(head.rotation.eulerAngles + new Vector3(-rotationInput.y, 0) * rotationSpeed);
@@ -83,7 +52,6 @@ public class PlayerController : MonoBehaviour
         var moveRight = rightDir * moveData.x;
 
         GetComponent<Rigidbody>().MovePosition(transform.position + (moveForward + moveRight) * moveSpeed);
-
 
         // Play footstep sounds when moving
         if (moveData.magnitude > 0)
@@ -100,11 +68,65 @@ public class PlayerController : MonoBehaviour
                 footstepsAudioSource.Stop();
             }
         }
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            RaycastHit hit;
+            if (Physics.Raycast(transform.position, transform.forward, out hit, 2f))
+            {
+                Debug.Log("Raycast hit: " + hit.collider.gameObject.name); // Check if the raycast hits the key object
+
+                if (hit.collider.CompareTag("Key"))
+                {
+                    Key key = hit.collider.GetComponent<Key>();
+                    if (key != null)
+                    {
+                        key.Collect();
+                        CollectKey();
+                    }
+                }
+            }
+        }
+    }
+
+    public void CollectKey()
+    {
+        collectedKeys++;
+        Debug.Log("Key collected. Total keys: " + collectedKeys);
+
+        if (collectedKeys >= requiredKeys)
+        {
+            UnlockDoor();
+        }
+    }
+
+    private void UnlockDoor()
+    {
+        isDoorUnlocked = true;
+        Debug.Log("Door unlocked!");
+
+        // Play door unlocking sound
+        AudioSource.PlayClipAtPoint(doorUnlockSound, door.transform.position);
+
+        // Open the door
+        door.SetActive(false);
+    }
+
+    void OnLook(InputValue value)
+    {
+        rotationInput = value.Get<Vector2>();
+    }
+
+    void OnMove(InputValue value)
+    {
+        moveData = value.Get<Vector2>();
+
+        Debug.Log(moveData);
     }
 
     void OnJump()
     {
-        //jump 
+        // Jump
         GetComponent<Rigidbody>().AddForce(new Vector3(0, 5, 0), ForceMode.Impulse);
     }
 }
