@@ -8,6 +8,7 @@ TagManager:
   - YourButtonTag
   - MyButton
   - Key
+  - Destroyable
   layers:
   - Default
   - TransparentFX
