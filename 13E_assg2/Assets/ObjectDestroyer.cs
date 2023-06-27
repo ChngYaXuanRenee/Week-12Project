@@ -4,12 +4,7 @@ using UnityEngine;
 
 public class ObjectDestroyer : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
+    //public string objectTagToDestory = "Destroyable";
     // Update is called once per frame
     void Update()
     {
@@ -23,7 +18,11 @@ public class ObjectDestroyer : MonoBehaviour
             if (Physics.Raycast (Camera.main.transform.position, direction, out hit, 100f))
             {
                 Debug.DrawLine(Camera.main.transform.position, hit.point, Color.green, 0.5f);
-                Destroy(hit.collider.gameObject);
+                if (hit.collider.CompareTag("Destroyable"))
+                {
+                    Destroy(hit.collider.gameObject);
+                }
+                
             }
             else
             {
