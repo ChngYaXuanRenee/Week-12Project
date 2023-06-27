@@ -39,7 +39,7 @@ public class TextTyper : MonoBehaviour
         // You can reset the currentMessageIndex or trigger a new message in some other way
 
         // Display the message "Door opens"
-        StartCoroutine(DisplayMessage("Door opens"));
+        StartCoroutine(DisplayMessage("Door is ready to open. Click on door to open it."));
     }
 
     private IEnumerator DisplayMessage(string message)
