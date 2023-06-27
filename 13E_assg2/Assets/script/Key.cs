@@ -8,6 +8,7 @@ public class Key : MonoBehaviour
 
     public void Collect()
     {
+        gameObject.SetActive(false);
         AudioSource.PlayClipAtPoint(collectSound, transform.position);
         Destroy(gameObject);
     }
