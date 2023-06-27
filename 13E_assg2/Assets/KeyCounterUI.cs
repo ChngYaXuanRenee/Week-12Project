@@ -1,16 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using TMPro;
 
 public class KeyCounterUI : MonoBehaviour
 {
-    private Text keyCountText;
+    [SerializeField] private TMPro.TextMeshProUGUI keyCountText;
     private int keysCollected;
+    public TextTyper textTyper;
 
     private void Start()
     {
-        keyCountText = GetComponent<Text>();
         keysCollected = 0;
         UpdateKeyCountUI();
     }
@@ -19,10 +19,15 @@ public class KeyCounterUI : MonoBehaviour
     {
         keysCollected++;
         UpdateKeyCountUI();
+
+        if (keysCollected == 3)
+        {
+            textTyper.StartNewMessage();
+        }
     }
 
     private void UpdateKeyCountUI()
     {
-        keyCountText.text = "Keys: " + keysCollected.ToString();
+        keyCountText.text = "Keys: " + keysCollected.ToString() + "/3";
     }
 }

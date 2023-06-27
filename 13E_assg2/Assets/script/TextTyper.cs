@@ -33,6 +33,36 @@ public class TextTyper : MonoBehaviour
         button.interactable = false; // Disable the button after it's clicked
     }
 
+    public void StartNewMessage()
+    {
+        // Add your code here to start a new typewriter message
+        // You can reset the currentMessageIndex or trigger a new message in some other way
+
+        // Display the message "Door opens"
+        StartCoroutine(DisplayMessage("Door opens"));
+    }
+
+    private IEnumerator DisplayMessage(string message)
+    {
+        textComp.text = ""; // Clear the previous message
+
+        foreach (char letter in message.ToCharArray())
+        {
+            textComp.text += letter;
+
+            yield return new WaitForSeconds(letterPause);
+        }
+
+        yield return new WaitForSeconds(2f); // Wait for 2 seconds before clearing the message
+
+        currentMessageIndex++; // Move to the next message
+
+        if (currentMessageIndex < messages.Length)
+        {
+            StartCoroutine(TypeText()); // Start typing the next message
+        }
+    }
+
     IEnumerator TypeText()
     {
         textComp.text = ""; // Clear the previous message

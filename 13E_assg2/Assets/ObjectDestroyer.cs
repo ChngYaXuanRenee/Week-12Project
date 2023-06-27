@@ -6,6 +6,7 @@ public class ObjectDestroyer : MonoBehaviour
 {
     public AudioClip destroySoundClip; // Sound clip to play when an object is destroyed
     private AudioSource audioSource;
+    private KeyCounterUI keyCounterUI;
 
     private void Start()
     {
@@ -15,6 +16,9 @@ public class ObjectDestroyer : MonoBehaviour
 
         // Add an AudioSource component to the audio object
         audioSource = audioObject.AddComponent<AudioSource>();
+
+        // Find the KeyCounterUI script component
+        keyCounterUI = FindObjectOfType<KeyCounterUI>();
     }
 
     private void Update()
@@ -37,6 +41,12 @@ public class ObjectDestroyer : MonoBehaviour
                     }
 
                     Destroy(hit.collider.gameObject);
+
+                    // Increment key count if KeyCounterUI script is available
+                    if (keyCounterUI != null)
+                    {
+                        keyCounterUI.CollectKey();
+                    }
                 }
             }
             else
