@@ -9,6 +9,11 @@ public class ObjectDestroyer : MonoBehaviour
     private KeyCounterUI keyCounterUI;
     private MyDoorController raycastObj;
 
+    //FOR GUN
+    public AudioClip gunCollectedSoundClip;
+    public TextMeshProUGUI messageText;
+    private bool gunCollected();
+
     private void Start()
     {
         // Create an empty game object as a child of the main camera
@@ -57,11 +62,37 @@ public class ObjectDestroyer : MonoBehaviour
                     }
 
                     raycastObj.PlayAnimation();
+
+                    //GUN
+                    if (hit.collider.name == "Gun")
+                    {
+                        CollectGun();
+                    }
                 }
             }
             else
             {
                 Debug.DrawLine(ray.origin, ray.origin + ray.direction * 100f, Color.red, 0.5f);
+            }
+        }
+    }
+
+    pricate void CollectGun()
+    {
+        if (!gunCollected)
+        {
+            gunCollected = true;
+
+            // Play the gun collected sound clip
+            if (gunCollectedSoundClip != null)
+            {
+                audioSource.PlayOneShot(gunCollectedSoundClip);
+            }
+
+            // Update the UI message
+            if (messageText != null)
+            {
+                messageText.text = "Gun Collected";
             }
         }
     }
