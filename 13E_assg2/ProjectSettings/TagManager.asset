@@ -9,6 +9,7 @@ TagManager:
   - MyButton
   - Key
   - Destroyable
+  - Door
   layers:
   - Default
   - TransparentFX
