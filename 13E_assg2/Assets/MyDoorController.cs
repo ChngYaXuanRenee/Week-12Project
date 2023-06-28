@@ -14,7 +14,7 @@ public class MyDoorController : MonoBehaviour
     }
 
     public void PlayAnimation()
-    {
+    { 
         if (!doorOpen)
         {
             doorAnim.Play("DoorOpen", 0, 0.0f);

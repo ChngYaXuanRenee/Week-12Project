@@ -7,6 +7,7 @@ public class ObjectDestroyer : MonoBehaviour
     public AudioClip destroySoundClip; // Sound clip to play when an object is destroyed
     private AudioSource audioSource;
     private KeyCounterUI keyCounterUI;
+    private MyDoorController raycastObj;
 
     private void Start()
     {
@@ -47,6 +48,15 @@ public class ObjectDestroyer : MonoBehaviour
                     {
                         keyCounterUI.CollectKey();
                     }
+                }
+                else if (hit.collider.CompareTag("InteractiveObject"))
+                {
+                    if (!raycastObj)
+                    {
+                        raycastObj = hit.collider.gameObject.GetComponent<MyDoorController>();
+                    }
+
+                    raycastObj.PlayAnimation();
                 }
             }
             else
