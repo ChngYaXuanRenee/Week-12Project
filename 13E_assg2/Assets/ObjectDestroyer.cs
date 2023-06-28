@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class ObjectDestroyer : MonoBehaviour
 {
@@ -9,19 +10,15 @@ public class ObjectDestroyer : MonoBehaviour
     private KeyCounterUI keyCounterUI;
     private MyDoorController raycastObj;
 
-    //FOR GUN
+    // FOR GUN
     public AudioClip gunCollectedSoundClip;
     public TextMeshProUGUI messageText;
-    private bool gunCollected();
+    private bool gunCollected; // Corrected variable declaration
 
     private void Start()
     {
-        // Create an empty game object as a child of the main camera
-        GameObject audioObject = new GameObject("DestroyAudio");
-        audioObject.transform.parent = Camera.main.transform;
-
-        // Add an AudioSource component to the audio object
-        audioSource = audioObject.AddComponent<AudioSource>();
+        // Get the AudioSource component attached to this game object
+        audioSource = GetComponent<AudioSource>();
 
         // Find the KeyCounterUI script component
         keyCounterUI = FindObjectOfType<KeyCounterUI>();
@@ -63,10 +60,10 @@ public class ObjectDestroyer : MonoBehaviour
 
                     raycastObj.PlayAnimation();
 
-                    //GUN
+                    // GUN
                     if (hit.collider.name == "Gun")
                     {
-                        CollectGun();
+                        CollectGun(hit.collider.gameObject);
                     }
                 }
             }
@@ -77,14 +74,14 @@ public class ObjectDestroyer : MonoBehaviour
         }
     }
 
-    pricate void CollectGun()
+    private void CollectGun(GameObject gunObject)
     {
         if (!gunCollected)
         {
             gunCollected = true;
 
-            // Play the gun collected sound clip
-            if (gunCollectedSoundClip != null)
+            // Play the gun collected sound clip using the audio source attached to this game object
+            if (gunCollectedSoundClip != null && audioSource != null)
             {
                 audioSource.PlayOneShot(gunCollectedSoundClip);
             }
@@ -93,6 +90,12 @@ public class ObjectDestroyer : MonoBehaviour
             if (messageText != null)
             {
                 messageText.text = "Gun Collected";
+            }
+
+            // Destroy the gun object
+            if (gunObject != null)
+            {
+                Destroy(gunObject);
             }
         }
     }
