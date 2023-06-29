@@ -40,6 +40,8 @@ public class Health : MonoBehaviour
         }
 
         UpdateHealthText();  // Update the UI text to display the updated health value
+
+        Debug.Log("Player took " + damageAmount + " damage. Current health: " + currentHealth);
     }
 
     private void GameOver()
@@ -48,5 +50,7 @@ public class Health : MonoBehaviour
 
         // Implement your game over logic here
         // This function will be called when the game is over
+
+        Debug.Log("Game Over!");
     }
 }
