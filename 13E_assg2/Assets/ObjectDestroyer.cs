@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class ObjectDestroyer : MonoBehaviour
@@ -15,6 +16,11 @@ public class ObjectDestroyer : MonoBehaviour
     public TextMeshProUGUI messageText;
     private bool gunCollected; // Corrected variable declaration
 
+    //FADE TO BLACK
+    public float fadeDuration = 1f;
+    private float currentDuration = 0f;
+    [SerializeField] private Image fadeImage;
+
     private void Start()
     {
         // Get the AudioSource component attached to this game object
@@ -22,6 +28,14 @@ public class ObjectDestroyer : MonoBehaviour
 
         // Find the KeyCounterUI script component
         keyCounterUI = FindObjectOfType<KeyCounterUI>();
+
+        // Find the "FadeEffect" GameObject and assign its Image component to the fadeImage variable
+        GameObject fadeEffectObject = GameObject.Find("FadeEffect");
+        if (fadeEffectObject != null)
+        {
+            fadeImage = fadeEffectObject.GetComponent<Image>();
+        }
+
     }
 
     private void Update()
@@ -92,11 +106,13 @@ public class ObjectDestroyer : MonoBehaviour
                 messageText.text = "Gun Collected";
             }
 
-            // Destroy the gun object
-            if (gunObject != null)
-            {
-                Destroy(gunObject);
-            }
+            // Destroy the gun object and fade effect
+            FadeToBlack fadeToBlack = fadeImage.GetComponent<FadeToBlack>();
+            fadeToBlack.enabled = true;
+            fadeToBlack.fadeDuration = fadeDuration;
+
+            // Destroy the gun object after the fade effect completes
+            Destroy(gunObject, fadeDuration);
         }
     }
 }
