@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,52 +7,77 @@ public class LoadingBar : MonoBehaviour
     public Image currentImage;
     public Image nextImage;
     public Image thirdImage;
-    public float transitionDuration = 2f;
-
-    private bool isTransitioning = false; // Added flag to track if transition is already in progress
+    public float transitionDuration = 4f;
 
     private void Start()
     {
-        // Ensure the nextImage and thirdImage are disabled at the start
-        currentImage.gameObject.SetActive(true);
+        // Disable all images at the start
+        currentImage.gameObject.SetActive(false);
         nextImage.gameObject.SetActive(false);
         thirdImage.gameObject.SetActive(false);
+
+        // Find the ObjectDestroyer script component
+        ObjectDestroyer objectDestroyer = FindObjectOfType<ObjectDestroyer>();
+
+        // Subscribe to the gun collected event
+        if (objectDestroyer != null && objectDestroyer.loadingBar == this)
+        {
+            objectDestroyer.OnGunCollected += HandleGunCollected;
+        }
     }
 
-    public void TransitionToNextImage()
+    private void HandleGunCollected()
     {
-        if (!isTransitioning)
-        {
-            StartCoroutine(TransitionCoroutine());
-        }
+        StartCoroutine(TransitionCoroutine());
     }
 
     private IEnumerator TransitionCoroutine()
     {
-        isTransitioning = true; // Set flag to indicate transition is in progress
+        // Enable the currentImage and set its alpha to 0
+        currentImage.gameObject.SetActive(true);
+        currentImage.canvasRenderer.SetAlpha(0f);
 
-        // Crossfade from currentImage to nextImage
+        // Crossfade the images over the specified duration
+        nextImage.CrossFadeAlpha(0f, transitionDuration, false);
+        thirdImage.CrossFadeAlpha(0f, transitionDuration, false);
+        currentImage.CrossFadeAlpha(1f, transitionDuration, false);
+
+        // Wait for the transition to complete
+        yield return new WaitForSeconds(transitionDuration);
+
+        // Disable the nextImage and thirdImage
+        nextImage.gameObject.SetActive(false);
+        thirdImage.gameObject.SetActive(false);
+
+        // Enable the nextImage and set its alpha to 0
         nextImage.gameObject.SetActive(true);
         nextImage.canvasRenderer.SetAlpha(0f);
+
+        // Crossfade the images over the specified duration
         currentImage.CrossFadeAlpha(0f, transitionDuration, false);
         nextImage.CrossFadeAlpha(1f, transitionDuration, false);
 
+        // Wait for the transition to complete
         yield return new WaitForSeconds(transitionDuration);
 
-        // Crossfade from nextImage to thirdImage
+        // Disable the currentImage
+        currentImage.gameObject.SetActive(false);
+
+        // Enable the thirdImage and set its alpha to 0
         thirdImage.gameObject.SetActive(true);
         thirdImage.canvasRenderer.SetAlpha(0f);
+
+        // Crossfade the images over the specified duration
         nextImage.CrossFadeAlpha(0f, transitionDuration, false);
         thirdImage.CrossFadeAlpha(1f, transitionDuration, false);
 
+        // Wait for the transition to complete
         yield return new WaitForSeconds(transitionDuration);
 
-        // Disable the currentImage and nextImage, and set their alpha to 1
-        currentImage.gameObject.SetActive(false);
-        currentImage.canvasRenderer.SetAlpha(1f);
+        // Disable the nextImage
         nextImage.gameObject.SetActive(false);
-        nextImage.canvasRenderer.SetAlpha(1f);
 
-        isTransitioning = false; // Reset flag to indicate transition is complete
+        // Destroy the thirdImage
+        Destroy(thirdImage.gameObject);
     }
 }

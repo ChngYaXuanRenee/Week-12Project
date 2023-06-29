@@ -38,8 +38,17 @@ public class TextTyper : MonoBehaviour
         // Add your code here to start a new typewriter message
         // You can reset the currentMessageIndex or trigger a new message in some other way
 
-        // Display the message "Door opens"
-        StartCoroutine(DisplayMessage("Door is ready to open. Click on door to open it."));
+        // Display the messages
+        StartCoroutine(DisplayMessages());
+    }
+
+    private IEnumerator DisplayMessages()
+    {
+        // Display the first message
+        yield return StartCoroutine(DisplayMessage("Door is ready to open. Click on door to open it."));
+
+        // Display the second message
+        yield return StartCoroutine(DisplayMessage("Collect gun to start fighting zombies, and collect potions that helped to fix your spacecraft too!"));
     }
 
     private IEnumerator DisplayMessage(string message)
