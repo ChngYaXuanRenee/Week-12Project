@@ -95,16 +95,16 @@ public class ObjectDestroyer : MonoBehaviour
                 messageText.text = "Gun Collected";
             }
 
-            // Trigger the loading bar transition
-            if (loadingBar != null)
-            {
-                loadingBar.TransitionToNextImage();
-            }
-
             // Destroy the gun object and fade effect
             if (gunObject != null)
             {
                 Destroy(gunObject);
+            }
+
+            // Trigger the loading bar transition
+            if (loadingBar != null)
+            {
+                loadingBar.TransitionToNextImage();
             }
         }
     }
