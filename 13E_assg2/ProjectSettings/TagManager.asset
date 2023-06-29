@@ -12,6 +12,7 @@ TagManager:
   - Door
   - InteractiveObject
   - Gun
+  - Alien
   layers:
   - Default
   - TransparentFX
