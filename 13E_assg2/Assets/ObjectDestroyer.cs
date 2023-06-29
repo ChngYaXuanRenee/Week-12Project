@@ -15,10 +15,8 @@ public class ObjectDestroyer : MonoBehaviour
     public TextMeshProUGUI messageText;
     private bool gunCollected; // Corrected variable declaration
 
-    //FADE TO BLACK
-    //public float fadeDuration = 1f;
-    //private float currentDuration = 0f;
-    //private Image fadeImage;
+    //LOAD BAR
+    public LoadingBar loadingBar;
 
     private void Start()
     {
@@ -95,6 +93,12 @@ public class ObjectDestroyer : MonoBehaviour
             if (messageText != null)
             {
                 messageText.text = "Gun Collected";
+            }
+
+            // Trigger the loading bar transition
+            if (loadingBar != null)
+            {
+                loadingBar.TransitionToNextImage();
             }
 
             // Destroy the gun object and fade effect
