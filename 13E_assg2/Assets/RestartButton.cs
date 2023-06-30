@@ -7,6 +7,7 @@ public class RestartButton : MonoBehaviour
     public Health playerHealth;
     public Animator playerAnimator;
     public TextMeshProUGUI keyCounterUI;
+    public TextMeshProUGUI healthUIText;
     public Button restartButton;
     public Canvas restartCanvas;
 
@@ -18,7 +19,8 @@ public class RestartButton : MonoBehaviour
         restartCanvas.enabled = false;
 
         // Set the player's health to the desired value
-        playerHealth.currentHealth = desiredHealth;
+        //playerHealth.currentHealth = desiredHealth;
+        healthUIText.text = "Health: 100";
 
         // Stop player animation
         playerAnimator.enabled = false;

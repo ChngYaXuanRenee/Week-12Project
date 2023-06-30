@@ -37,7 +37,7 @@ public class Health : MonoBehaviour
 
     private void UpdateHealthText()
     {
-        healthText.text = currentHealth.ToString();  // Update the UI text with the current health value
+        healthText.text = "Health: " + currentHealth.ToString();  // Update the UI text with the current health value
     }
 
     public void TakeDamage(int damageAmount)
