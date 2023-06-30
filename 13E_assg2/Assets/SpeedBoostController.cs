@@ -3,7 +3,7 @@ using UnityEngine;
 public class SpeedBoostController : MonoBehaviour
 {
     public float boostDuration = 10f;
-    public float boostMultiplier = 2f;
+    public float boostMultiplier = 10f;
 
     private PlayerController playerMovement;
     private bool isBoostActive = false;

@@ -28,6 +28,10 @@ public class PlayerController : MonoBehaviour
     private int collectedKeys = 0;
     private bool isDoorUnlocked = false;
 
+    private float speedMultiplier = 1f; // Default speed multiplier
+
+    public SpeedBoostController speedBoostController; // Reference to the SpeedBoostController component
+
     private void Start()
     {
         // Assign the background music audio clip to the background audio source
@@ -38,7 +42,23 @@ public class PlayerController : MonoBehaviour
 
         // Play the background music
         backgroundAudioSource.Play();
+
+        // Get the SpeedBoostController component
+        speedBoostController = GetComponent<SpeedBoostController>();
     }
+
+    private void CollectSpeed(GameObject speedObject)
+    {
+        SpeedBoostController speedBoostController = speedObject.GetComponent<SpeedBoostController>();
+
+        if (speedBoostController != null)
+        {
+            speedBoostController.ApplySpeedBoost();
+        }
+
+        Destroy(speedObject);
+    }
+
 
     private void Update()
     {
@@ -51,7 +71,7 @@ public class PlayerController : MonoBehaviour
         var moveForward = forwardDir * moveData.y;
         var moveRight = rightDir * moveData.x;
 
-        GetComponent<Rigidbody>().MovePosition(transform.position + (moveForward + moveRight) * moveSpeed);
+        GetComponent<Rigidbody>().MovePosition(transform.position + (moveForward + moveRight) * (moveSpeed * speedMultiplier)); // Multiply moveSpeed by speedMultiplier
 
         // Play footstep sounds when moving
         if (moveData.magnitude > 0)
@@ -85,6 +105,13 @@ public class PlayerController : MonoBehaviour
                         CollectKey();
                     }
                 }
+                else if (hit.collider.CompareTag("Speed"))
+                {
+                    if (speedBoostController != null)
+                    {
+                        speedBoostController.ApplySpeedBoost();
+                    }
+                }
             }
         }
     }
@@ -110,6 +137,16 @@ public class PlayerController : MonoBehaviour
 
         // Open the door
         door.SetActive(false);
+    }
+
+    public void SetSpeedMultiplier(float multiplier)
+    {
+        speedMultiplier = multiplier;
+    }
+
+    public void ResetSpeedMultiplier()
+    {
+        speedMultiplier = 1f; // Reset the speed multiplier to its default value
     }
 
     void OnLook(InputValue value)
