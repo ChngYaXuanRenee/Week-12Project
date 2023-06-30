@@ -7,6 +7,7 @@ public class Health : MonoBehaviour
     public int maxHealth = 100;  // Maximum health value
     public int currentHealth;   // Current health value
     public TextMeshProUGUI healthText;     // Reference to the UI text element for displaying health
+    public Animator deathAnimator;  // Reference to the death animator component
 
     private bool isGameOver = false;  // Flag to track game over state
 
@@ -35,7 +36,6 @@ public class Health : MonoBehaviour
             currentHealth = 0;  // Clamp the health value to zero to prevent negative values
             // Implement any additional logic for player death or game over
 
-            // Example: Call a GameOver function directly
             GameOver();
         }
 
@@ -47,6 +47,12 @@ public class Health : MonoBehaviour
     private void GameOver()
     {
         isGameOver = true;
+
+        // Play the death animation
+        if (deathAnimator != null)
+        {
+            deathAnimator.SetTrigger("Die");
+        }
 
         // Implement your game over logic here
         // This function will be called when the game is over
