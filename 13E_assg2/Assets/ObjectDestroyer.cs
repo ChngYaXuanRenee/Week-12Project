@@ -27,7 +27,6 @@ public class ObjectDestroyer : MonoBehaviour
 
     private bool interactiveObjectActivated = false; // Flag to track if the interactive object has been activated
 
-
     private void Start()
     {
         audioSource = GetComponent<AudioSource>();
@@ -69,8 +68,6 @@ public class ObjectDestroyer : MonoBehaviour
                     raycastObj.PlayAnimation();
                     ActivateInteractiveObject(); // Activate the interactive object
                 }
-
-                // If the hit object is a gun
                 else if (hit.collider.CompareTag("Gun"))
                 {
                     if (interactiveObjectActivated) // Check if the interactive object has been activated
@@ -78,8 +75,6 @@ public class ObjectDestroyer : MonoBehaviour
                         CollectGun(hit.collider.gameObject);
                     }
                 }
-
-                // If the hit object is a potion
                 else if (hit.collider.CompareTag("GreenPotion") || hit.collider.CompareTag("YellowPotion") || hit.collider.CompareTag("PinkPotion"))
                 {
                     if (interactiveObjectActivated) // Check if the interactive object has been activated
@@ -87,11 +82,20 @@ public class ObjectDestroyer : MonoBehaviour
                         CollectPotion(hit.collider.gameObject);
                     }
                 }
-
                 else
                 {
-                Debug.DrawLine(ray.origin, ray.origin + ray.direction * 100f, Color.red, 0.5f);
+                    Debug.DrawLine(ray.origin, ray.origin + ray.direction * 100f, Color.red, 0.5f);
+                }
             }
+        }
+    }
+
+    private void UpdatePotionCountUI(TextMeshProUGUI potionText, string potionType, int count)
+    {
+        if (potionText != null)
+        {
+            // Update the UI text with the potion type and count
+            potionText.text = potionType + ": " + count.ToString();
         }
     }
 
@@ -103,23 +107,22 @@ public class ObjectDestroyer : MonoBehaviour
             if (potionObject.CompareTag("GreenPotion"))
             {
                 greenPotionCount++;
-                UpdatePotionCountUI(greenPotionText, greenPotionCount);
+                UpdatePotionCountUI(greenPotionText, "Green potion", greenPotionCount);
             }
             else if (potionObject.CompareTag("YellowPotion"))
             {
                 yellowPotionCount++;
-                UpdatePotionCountUI(yellowPotionText, yellowPotionCount);
+                UpdatePotionCountUI(yellowPotionText, "Yellow potion", yellowPotionCount);
             }
             else if (potionObject.CompareTag("PinkPotion"))
             {
                 pinkPotionCount++;
-                UpdatePotionCountUI(pinkPotionText, pinkPotionCount);
+                UpdatePotionCountUI(pinkPotionText, "Pink potion", pinkPotionCount);
             }
 
             Destroy(potionObject);
         }
     }
-
 
     private void CollectGun(GameObject gunObject)
     {
