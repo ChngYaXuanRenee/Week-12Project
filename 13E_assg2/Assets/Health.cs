@@ -8,6 +8,7 @@ public class Health : MonoBehaviour
     public int currentHealth;   // Current health value
     public TextMeshProUGUI healthText;     // Reference to the UI text element for displaying health
     public Animator deathAnimator;  // Reference to the death animator component
+    public Canvas gameOverCanvas; 
 
     private bool isGameOver = false;  // Flag to track game over state
 
@@ -15,6 +16,13 @@ public class Health : MonoBehaviour
     {
         currentHealth = maxHealth;  // Set the initial health to the maximum value
         UpdateHealthText();         // Update the UI text to display the initial health
+
+
+        // Disable the game over canvas at the start
+        if (gameOverCanvas != null)
+        {
+            gameOverCanvas.enabled = false;
+        }
 
         // Disable the death animator if the initial health is at its maximum value
         if (currentHealth == maxHealth)
@@ -53,13 +61,19 @@ public class Health : MonoBehaviour
 
         Debug.Log("Player took " + damageAmount + " damage. Current health: " + currentHealth);
 
-        // Check if the health value is exactly 80
+        // Check if the health value is exactly 0
         if (currentHealth == 0)
         {
             if (deathAnimator != null)
             {
                 deathAnimator.enabled = true;
                 deathAnimator.SetTrigger("Die");
+            }
+
+            //show game over ui
+            if (gameOverCanvas != null)
+            {
+                gameOverCanvas.enabled = true;
             }
 
             // Implement any additional logic for player death or game over
