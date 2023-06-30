@@ -17,6 +17,11 @@ public class ObjectDestroyer : MonoBehaviour
 
     public LoadingBar loadingBar;
 
+    // Potion counts
+    private int greenPotionCount;
+    private int yellowPotionCount;
+    private int pinkPotionCount;
+
     private void Start()
     {
         audioSource = GetComponent<AudioSource>();
@@ -57,7 +62,11 @@ public class ObjectDestroyer : MonoBehaviour
 
                     raycastObj.PlayAnimation();
 
-                    if (hit.collider.name == "Gun")
+                    if (hit.collider.CompareTag("GreenPotion") || hit.collider.CompareTag("YellowPotion") || hit.collider.CompareTag("PinkPotion"))
+                    {
+                        CollectPotion(hit.collider.gameObject);
+                    }
+                    else if (hit.collider.CompareTag("Gun"))
                     {
                         CollectGun(hit.collider.gameObject);
                     }
@@ -68,6 +77,28 @@ public class ObjectDestroyer : MonoBehaviour
                 Debug.DrawLine(ray.origin, ray.origin + ray.direction * 100f, Color.red, 0.5f);
             }
         }
+    }
+
+    private void CollectPotion(GameObject potionObject)
+    {
+        // Check the type of the collected potion
+        if (potionObject.CompareTag("GreenPotion"))
+        {
+            greenPotionCount++;
+            UpdatePotionCountUI("Green potion:", greenPotionCount);
+        }
+        else if (potionObject.CompareTag("YellowPotion"))
+        {
+            yellowPotionCount++;
+            UpdatePotionCountUI("Yellow potion:", yellowPotionCount);
+        }
+        else if (potionObject.CompareTag("PinkPotion"))
+        {
+            pinkPotionCount++;
+            UpdatePotionCountUI("Pink potion:", pinkPotionCount);
+        }
+
+        Destroy(potionObject);
     }
 
     private void CollectGun(GameObject gunObject)
@@ -91,10 +122,16 @@ public class ObjectDestroyer : MonoBehaviour
                 OnGunCollected?.Invoke();
             }
 
-            if (gunObject != null)
-            {
-                Destroy(gunObject);
-            }
+            Destroy(gunObject);
+        }
+    }
+
+    private void UpdatePotionCountUI(string potionType, int count)
+    {
+        if (messageText != null)
+        {
+            // Update the UI text with the potion type and count
+            messageText.text = potionType + " " + count.ToString();
         }
     }
 }
