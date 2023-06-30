@@ -15,7 +15,17 @@ public class Health : MonoBehaviour
     {
         currentHealth = maxHealth;  // Set the initial health to the maximum value
         UpdateHealthText();         // Update the UI text to display the initial health
+
+        // Disable the death animator if the initial health is at its maximum value
+        if (currentHealth == maxHealth)
+        {
+            if (deathAnimator != null)
+            {
+                deathAnimator.enabled = false;
+            }
+        }
     }
+
 
     private void UpdateHealthText()
     {
@@ -34,29 +44,29 @@ public class Health : MonoBehaviour
         if (currentHealth <= 0)
         {
             currentHealth = 0;  // Clamp the health value to zero to prevent negative values
-            // Implement any additional logic for player death or game over
+                                // Implement any additional logic for player death or game over
 
-            GameOver();
+            //GameOver();
         }
 
         UpdateHealthText();  // Update the UI text to display the updated health value
 
         Debug.Log("Player took " + damageAmount + " damage. Current health: " + currentHealth);
-    }
 
-    private void GameOver()
-    {
-        isGameOver = true;
-
-        // Play the death animation
-        if (deathAnimator != null)
+        // Check if the health value is exactly 80
+        if (currentHealth == 80)
         {
-            deathAnimator.SetTrigger("Die");
+            if (deathAnimator != null)
+            {
+                deathAnimator.enabled = true;
+                deathAnimator.SetTrigger("Die");
+            }
+
+            // Implement any additional logic for player death or game over
+
+            //GameOver();
         }
 
-        // Implement your game over logic here
-        // This function will be called when the game is over
 
-        Debug.Log("Game Over!");
     }
 }
