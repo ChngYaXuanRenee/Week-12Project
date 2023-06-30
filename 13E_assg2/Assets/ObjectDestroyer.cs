@@ -25,8 +25,6 @@ public class ObjectDestroyer : MonoBehaviour
     public TextMeshProUGUI yellowPotionText;
     public TextMeshProUGUI pinkPotionText;
 
-    private bool interactiveObjectActivated = false; // Flag to track if the interactive object has been activated
-
     private void Start()
     {
         audioSource = GetComponent<AudioSource>();
@@ -66,21 +64,18 @@ public class ObjectDestroyer : MonoBehaviour
                     }
 
                     raycastObj.PlayAnimation();
-                    ActivateInteractiveObject(); // Activate the interactive object
                 }
                 else if (hit.collider.CompareTag("Gun"))
                 {
-                    if (interactiveObjectActivated) // Check if the interactive object has been activated
-                    {
-                        CollectGun(hit.collider.gameObject);
-                    }
+                    CollectGun(hit.collider.gameObject);
                 }
                 else if (hit.collider.CompareTag("GreenPotion") || hit.collider.CompareTag("YellowPotion") || hit.collider.CompareTag("PinkPotion"))
                 {
-                    if (interactiveObjectActivated) // Check if the interactive object has been activated
-                    {
-                        CollectPotion(hit.collider.gameObject);
-                    }
+                    CollectPotion(hit.collider.gameObject);
+                }
+                else if (hit.collider.CompareTag("Speed"))
+                {
+                    CollectSpeed(hit.collider.gameObject);
                 }
                 else
                 {
@@ -101,32 +96,28 @@ public class ObjectDestroyer : MonoBehaviour
 
     private void CollectPotion(GameObject potionObject)
     {
-        if (interactiveObjectActivated)
+        if (potionObject.CompareTag("GreenPotion"))
         {
-            // Only allow potion collection if the interactive object has been activated
-            if (potionObject.CompareTag("GreenPotion"))
-            {
-                greenPotionCount++;
-                UpdatePotionCountUI(greenPotionText, "Green potion", greenPotionCount);
-            }
-            else if (potionObject.CompareTag("YellowPotion"))
-            {
-                yellowPotionCount++;
-                UpdatePotionCountUI(yellowPotionText, "Yellow potion", yellowPotionCount);
-            }
-            else if (potionObject.CompareTag("PinkPotion"))
-            {
-                pinkPotionCount++;
-                UpdatePotionCountUI(pinkPotionText, "Pink potion", pinkPotionCount);
-            }
-
-            Destroy(potionObject);
+            greenPotionCount++;
+            UpdatePotionCountUI(greenPotionText, "Green potion", greenPotionCount);
         }
+        else if (potionObject.CompareTag("YellowPotion"))
+        {
+            yellowPotionCount++;
+            UpdatePotionCountUI(yellowPotionText, "Yellow potion", yellowPotionCount);
+        }
+        else if (potionObject.CompareTag("PinkPotion"))
+        {
+            pinkPotionCount++;
+            UpdatePotionCountUI(pinkPotionText, "Pink potion", pinkPotionCount);
+        }
+
+        Destroy(potionObject);
     }
 
     private void CollectGun(GameObject gunObject)
     {
-        if (interactiveObjectActivated && !gunCollected)
+        if (!gunCollected)
         {
             gunCollected = true;
 
@@ -149,6 +140,14 @@ public class ObjectDestroyer : MonoBehaviour
         }
     }
 
+    private void CollectSpeed(GameObject speedObject)
+    {
+        // Implement your logic for collecting the "Speed" object here
+        // This method will be called when the "Speed" object is hit by the raycast
+
+        Destroy(speedObject);
+    }
+
     private void UpdatePotionCountUI(TextMeshProUGUI potionText, int count)
     {
         if (potionText != null)
@@ -156,11 +155,5 @@ public class ObjectDestroyer : MonoBehaviour
             // Update the UI text with the potion type and count
             potionText.text = count.ToString();
         }
-    }
-
-    public void ActivateInteractiveObject()
-    {
-        interactiveObjectActivated = true;
-        // Perform any additional actions when the interactive object is activated
     }
 }
