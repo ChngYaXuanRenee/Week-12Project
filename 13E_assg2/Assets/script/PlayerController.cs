@@ -32,6 +32,11 @@ public class PlayerController : MonoBehaviour
 
     public SpeedBoostController speedBoostController; // Reference to the SpeedBoostController component
 
+    public float GetSpeedMultiplier()
+    {
+        return speedMultiplier;
+    }
+
     private void Start()
     {
         // Assign the background music audio clip to the background audio source

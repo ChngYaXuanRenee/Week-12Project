@@ -7,6 +7,7 @@ public class SpeedBoostController : MonoBehaviour
 
     private PlayerController playerMovement;
     private bool isBoostActive = false;
+    private float previousSpeedMultiplier;
 
     private void Start()
     {
@@ -17,6 +18,10 @@ public class SpeedBoostController : MonoBehaviour
     {
         if (!isBoostActive)
         {
+            Debug.Log("Applying speed boost");
+            // Save the current speed multiplier value
+            previousSpeedMultiplier = playerMovement.GetSpeedMultiplier();
+
             // Apply the speed boost effect
             playerMovement.SetSpeedMultiplier(boostMultiplier);
 
@@ -29,9 +34,10 @@ public class SpeedBoostController : MonoBehaviour
 
     private void RevertSpeedBoost()
     {
-        // Revert the speed boost effect
-        playerMovement.ResetSpeedMultiplier();
+        // Revert the speed boost effect by setting the previous speed multiplier value
+        playerMovement.SetSpeedMultiplier(previousSpeedMultiplier);
 
         isBoostActive = false;
     }
+
 }
