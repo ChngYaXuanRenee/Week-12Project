@@ -54,7 +54,7 @@ public class Health : MonoBehaviour
         Debug.Log("Player took " + damageAmount + " damage. Current health: " + currentHealth);
 
         // Check if the health value is exactly 80
-        if (currentHealth == 80)
+        if (currentHealth == 0)
         {
             if (deathAnimator != null)
             {
