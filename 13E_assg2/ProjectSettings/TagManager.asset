@@ -13,6 +13,9 @@ TagManager:
   - InteractiveObject
   - Gun
   - Alien
+  - GreenPotion
+  - YellowPotion
+  - PinkPotion
   layers:
   - Default
   - TransparentFX

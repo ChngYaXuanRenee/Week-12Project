@@ -21,6 +21,12 @@ public class ObjectDestroyer : MonoBehaviour
     private int greenPotionCount;
     private int yellowPotionCount;
     private int pinkPotionCount;
+    public TextMeshProUGUI greenPotionText;
+    public TextMeshProUGUI yellowPotionText;
+    public TextMeshProUGUI pinkPotionText;
+
+    private bool interactiveObjectActivated = false; // Flag to track if the interactive object has been activated
+
 
     private void Start()
     {
@@ -61,19 +67,29 @@ public class ObjectDestroyer : MonoBehaviour
                     }
 
                     raycastObj.PlayAnimation();
+                    ActivateInteractiveObject(); // Activate the interactive object
+                }
 
-                    if (hit.collider.CompareTag("GreenPotion") || hit.collider.CompareTag("YellowPotion") || hit.collider.CompareTag("PinkPotion"))
-                    {
-                        CollectPotion(hit.collider.gameObject);
-                    }
-                    else if (hit.collider.CompareTag("Gun"))
+                // If the hit object is a gun
+                else if (hit.collider.CompareTag("Gun"))
+                {
+                    if (interactiveObjectActivated) // Check if the interactive object has been activated
                     {
                         CollectGun(hit.collider.gameObject);
                     }
                 }
-            }
-            else
-            {
+
+                // If the hit object is a potion
+                else if (hit.collider.CompareTag("GreenPotion") || hit.collider.CompareTag("YellowPotion") || hit.collider.CompareTag("PinkPotion"))
+                {
+                    if (interactiveObjectActivated) // Check if the interactive object has been activated
+                    {
+                        CollectPotion(hit.collider.gameObject);
+                    }
+                }
+
+                else
+                {
                 Debug.DrawLine(ray.origin, ray.origin + ray.direction * 100f, Color.red, 0.5f);
             }
         }
@@ -81,29 +97,33 @@ public class ObjectDestroyer : MonoBehaviour
 
     private void CollectPotion(GameObject potionObject)
     {
-        // Check the type of the collected potion
-        if (potionObject.CompareTag("GreenPotion"))
+        if (interactiveObjectActivated)
         {
-            greenPotionCount++;
-            UpdatePotionCountUI("Green potion:", greenPotionCount);
-        }
-        else if (potionObject.CompareTag("YellowPotion"))
-        {
-            yellowPotionCount++;
-            UpdatePotionCountUI("Yellow potion:", yellowPotionCount);
-        }
-        else if (potionObject.CompareTag("PinkPotion"))
-        {
-            pinkPotionCount++;
-            UpdatePotionCountUI("Pink potion:", pinkPotionCount);
-        }
+            // Only allow potion collection if the interactive object has been activated
+            if (potionObject.CompareTag("GreenPotion"))
+            {
+                greenPotionCount++;
+                UpdatePotionCountUI(greenPotionText, greenPotionCount);
+            }
+            else if (potionObject.CompareTag("YellowPotion"))
+            {
+                yellowPotionCount++;
+                UpdatePotionCountUI(yellowPotionText, yellowPotionCount);
+            }
+            else if (potionObject.CompareTag("PinkPotion"))
+            {
+                pinkPotionCount++;
+                UpdatePotionCountUI(pinkPotionText, pinkPotionCount);
+            }
 
-        Destroy(potionObject);
+            Destroy(potionObject);
+        }
     }
+
 
     private void CollectGun(GameObject gunObject)
     {
-        if (!gunCollected)
+        if (interactiveObjectActivated && !gunCollected)
         {
             gunCollected = true;
 
@@ -126,12 +146,18 @@ public class ObjectDestroyer : MonoBehaviour
         }
     }
 
-    private void UpdatePotionCountUI(string potionType, int count)
+    private void UpdatePotionCountUI(TextMeshProUGUI potionText, int count)
     {
-        if (messageText != null)
+        if (potionText != null)
         {
             // Update the UI text with the potion type and count
-            messageText.text = potionType + " " + count.ToString();
+            potionText.text = count.ToString();
         }
+    }
+
+    public void ActivateInteractiveObject()
+    {
+        interactiveObjectActivated = true;
+        // Perform any additional actions when the interactive object is activated
     }
 }
