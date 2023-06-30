@@ -144,6 +144,13 @@ public class ObjectDestroyer : MonoBehaviour
     {
         // Implement your logic for collecting the "Speed" object here
         // This method will be called when the "Speed" object is hit by the raycast
+        SpeedBoostController speedBoostController = GetComponent<SpeedBoostController>();
+
+        if (speedBoostController != null)
+        {
+            // Apply the speed boost
+            speedBoostController.ApplySpeedBoost();
+        }
 
         Destroy(speedObject);
     }

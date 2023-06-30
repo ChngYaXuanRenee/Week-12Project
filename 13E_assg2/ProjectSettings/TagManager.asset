@@ -16,6 +16,7 @@ TagManager:
   - GreenPotion
   - YellowPotion
   - PinkPotion
+  - Speed
   layers:
   - Default
   - TransparentFX
